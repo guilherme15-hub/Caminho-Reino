@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import initSqlJs from 'sql.js';
 import fs from 'fs';
 import path from 'path';
+import { Buffer } from 'buffer';
 
 const app = express();
 const PORT = 3001;
@@ -81,7 +82,7 @@ app.post('/api/register', async (req, res) => {
     runAndSave('INSERT INTO user_progress (user_id) VALUES (?)', [userId]);
     const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ success: true, token, user: { id: userId, name, email } });
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Erro ao cadastrar usuário' });
   }
 });
@@ -117,7 +118,7 @@ app.post('/api/login', async (req, res) => {
       points: progressResult[0].values[0][5]
     } : null;
     res.json({ success: true, token, user: { id: user.id, name: user.name, email: user.email }, progress });
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Erro ao fazer login' });
   }
 });
@@ -135,7 +136,7 @@ app.post('/api/forgot-password', async (req, res) => {
     const userId = result[0].values[0][0];
     const resetToken = jwt.sign({ userId, type: 'reset' }, JWT_SECRET, { expiresIn: '1h' });
     res.json({ success: true, message: 'Token de recuperação gerado', resetToken });
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Erro ao processar solicitação' });
   }
 });
@@ -153,7 +154,7 @@ app.post('/api/reset-password', async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     runAndSave('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, decoded.userId]);
     res.json({ success: true, message: 'Senha atualizada com sucesso' });
-  } catch (error) {
+  } catch {
     res.status(401).json({ error: 'Token expirado ou inválido' });
   }
 });
@@ -167,7 +168,7 @@ const authenticate = (req, res, next) => {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.userId = decoded.userId;
     next();
-  } catch (error) {
+  } catch {
     return res.status(401).json({ error: 'Token inválido' });
   }
 };
