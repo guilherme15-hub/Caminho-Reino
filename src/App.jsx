@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
 import QuizGame from './QuizGame';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import LoginPage from './pages/Login';
+import RegisterPage from './pages/Register';
+import ForgotPasswordPage from './pages/ForgotPassword';
 
 // Ícones simples em SVG
 const HomeIcon = () => (<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>);
@@ -11,9 +15,53 @@ const ProfileIcon = () => (<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.7
 const SearchIcon = () => (<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>);
 const NotificationsIcon = () => (<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>);
 
-export default function App() {
+// Componente interno que usa useAuth
+function AppContent() {
+  const { user, loading, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('home');
+  const [authView, setAuthView] = useState('login'); // login, register, forgot
 
+  // Se carregando, mostra loading
+  if (loading) {
+    return (
+      <div className="auth-page">
+        <div className="auth-container">
+          <div className="auth-logo">
+            <h1>👑 Caminho do Reino</h1>
+          </div>
+          <p style={{textAlign: 'center', color: '#888'}}>Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Se não logado, mostra tela de autenticação
+  if (!user) {
+    return (
+      <div className="app-container">
+        {authView === 'login' && (
+          <LoginPage 
+            onSwitchToRegister={() => setAuthView('register')}
+            onLoginSuccess={() => setAuthView('login')}
+            onSwitchToForgot={() => setAuthView('forgot')}
+          />
+        )}
+        {authView === 'register' && (
+          <RegisterPage 
+            onSwitchToLogin={() => setAuthView('login')}
+            onRegisterSuccess={() => setAuthView('login')}
+          />
+        )}
+        {authView === 'forgot' && (
+          <ForgotPasswordPage 
+            onBackToLogin={() => setAuthView('login')}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // Se logado, mostra o app normal
   return (
     <div className="app-container">
       
@@ -24,6 +72,7 @@ export default function App() {
           <div className="top-bar-actions">
             <button className="icon-btn"><SearchIcon /></button>
             <button className="icon-btn"><NotificationsIcon /></button>
+            <button className="icon-btn" onClick={logout} title="Sair">🚪</button>
           </div>
         </div>
       )}
@@ -260,4 +309,9 @@ function DiscoverPage({ onPlay }) {
 
     </div>
   );
+}
+
+// Export wrapper
+export default function App() {
+  return <AppContent />;
 }
