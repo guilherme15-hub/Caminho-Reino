@@ -30,7 +30,13 @@ export default function LoginPage({ onSwitchToRegister, onLoginSuccess, onSwitch
         
         <h2>Entrar na Conta</h2>
         
-        {error && <div className="auth-error">{error}</div>}
+        {error && (
+          <div className="auth-error">
+            {error === 'Failed to fetch'
+              ? 'Não foi possível conectar ao servidor. Verifique se o backend está rodando.'
+              : error}
+          </div>
+        )}
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">

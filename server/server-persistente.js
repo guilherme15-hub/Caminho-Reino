@@ -13,7 +13,7 @@ const JWT_SECRET = 'caminho-reino-secret-key-2024';
 const DB_FILE = path.resolve('database.sqlite');
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json());''
 
 let db;
 let SQL;
