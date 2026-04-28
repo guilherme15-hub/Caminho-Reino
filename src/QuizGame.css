@@ -151,3 +151,385 @@
   margin-bottom: 40px;
   box-shadow: 0 4px 0 rgba(0,0,0,0.1);
 }
+
+/* ===== NOVAS TELAS DO JOGO ===== */
+
+/* Menu Inicial */
+.menu-bg {
+  background-image: linear-gradient(180deg, #1a0a2e 0%, #46178f 50%, #2e0066 100%);
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.menu-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.menu-title {
+  font-size: 4rem;
+  margin-bottom: 10px;
+}
+
+.menu-subtitle {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #ffa602;
+}
+
+.menu-theme {
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 30px;
+  font-style: italic;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.menu-btn {
+  padding: 18px 30px;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.menu-btn.primary {
+  background: linear-gradient(180deg, #ffa602 0%, #c78100 100%);
+  color: #1a0a2e;
+  box-shadow: 0 4px 0 #a66b00;
+}
+
+.menu-btn.primary:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+.menu-btn.secondary {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 2px solid rgba(255,255,255,0.3);
+  box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+}
+
+.menu-btn.secondary:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+.menu-info {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.badge {
+  background: #e21b3c;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  margin-left: 8px;
+}
+
+/* Mapa de Capítulos */
+.map-bg {
+  background-image: linear-gradient(180deg, #1a0a2e 0%, #2e0066 100%);
+}
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: rgba(0,0,0,0.3);
+}
+
+.map-header h2 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.chapters-list {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.chapter-card {
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 2px solid transparent;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.chapter-card.completed {
+  border-color: #26890c;
+  background: rgba(38, 137, 12, 0.2);
+}
+
+.chapter-icon {
+  font-size: 2.5rem;
+}
+
+.chapter-info {
+  flex: 1;
+}
+
+.chapter-info h3 {
+  font-size: 1.1rem;
+  margin: 0 0 5px 0;
+}
+
+.chapter-info p {
+  font-size: 0.85rem;
+  color: #ccc;
+  margin: 0 0 5px 0;
+}
+
+.chapter-questions {
+  font-size: 0.75rem;
+  color: #ffa602;
+}
+
+.chapter-action {
+  display: flex;
+  align-items: center;
+}
+
+.play-btn {
+  background: #1368ce;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #0d4a94;
+}
+
+.play-btn:active {
+  transform: translateY(3px);
+  box-shadow: none;
+}
+
+.completed-badge {
+  background: #26890c;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+/* Resultado do Capítulo */
+.result-bg {
+  background-image: linear-gradient(180deg, #26890c 0%, #1a6208 100%);
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.result-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.result-content h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.chapter-title {
+  font-size: 1.3rem;
+  color: #ffa602;
+  margin-bottom: 30px;
+}
+
+.score-section {
+  background: rgba(255,255,255,0.15);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+}
+
+.score-label {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin-bottom: 5px;
+}
+
+.score-value {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #ffa602;
+}
+
+.reward-section {
+  margin-bottom: 30px;
+}
+
+.reward-section h3 {
+  margin-bottom: 15px;
+}
+
+.reward-card {
+  background: white;
+  color: #1a0a2e;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+}
+
+.reward-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.reward-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.reward-desc {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.result-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Inventário */
+.inventory-bg {
+  background-image: linear-gradient(180deg, #1a0a2e 0%, #46178f 100%);
+}
+
+.inventory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: rgba(0,0,0,0.3);
+}
+
+.inventory-header h2 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.inventory-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  background: rgba(0,0,0,0.2);
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #ffa602;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+.empty-inventory {
+  text-align: center;
+  padding: 40px 20px;
+  color: #ccc;
+}
+
+.empty-inventory p {
+  margin: 10px 0;
+}
+
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+.inventory-item {
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  border: 2px solid rgba(255,255,255,0.1);
+}
+
+.inventory-item .item-icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.inventory-item .item-name {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.inventory-item .item-desc {
+  font-size: 0.75rem;
+  color: #ccc;
+}
+
+/* Quiz com progresso */
+.quiz-progress {
+  padding: 10px 16px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffa602, #c78100);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.chapter-name {
+  font-size: 0.9rem;
+  color: #ffa602;
+}
