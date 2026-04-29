@@ -1,58 +1,146 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
-const STORAGE_USER = "caminho-reino-user";
 
-const loadUser = () => {
-  try {
-    const stored = localStorage.getItem(STORAGE_USER);
-    if (stored) {
-      return JSON.parse(stored);
-    }
-    // Cria usuário anônimo padrão se não existir
-    const newUser = {
-      id: Date.now(),
-      name: 'Viajante',
-      isAnonymous: true,
-      progress: {
-        quests_completed: 0,
-        badges: 0,
-        study_time: 0,
-        points: 0
-      }
-    };
-    localStorage.setItem(STORAGE_USER, JSON.stringify(newUser));
-    return newUser;
-  } catch {
-    return null;
-  }
-};
-
-const saveUser = (user) => {
-  localStorage.setItem(STORAGE_USER, JSON.stringify(user));
-};
+const API_URL = 'http://localhost:3001/api';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [progress, setProgress] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Verificar token ao iniciar
   useEffect(() => {
-    const storedUser = loadUser();
-    if (storedUser) {
-      setUser(storedUser);
-      setProgress(storedUser.progress || null);
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchProfile(token);
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
-  const updateProgress = (newProgress) => {
-    if (user) {
-      const updated = { ...user, progress: newProgress };
-      setUser(updated);
-      setProgress(newProgress);
-      saveUser(updated);
+  const fetchProfile = async (token) => {
+    try {
+      const response = await fetch(`${API_URL}/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+        setProgress(data.progress);
+        localStorage.setItem('token', token);
+      } else {
+        logout();
+      }
+    } catch (err) {
+      logout();
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const login = async (email, password) => {
+    setError(null);
+    try {
+      const response = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao fazer login');
+      }
+      
+      setUser(data.user);
+      setProgress(data.progress);
+      localStorage.setItem('token', data.token);
+      
+      return { success: true };
+    } catch (err) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    }
+  };
+
+  const register = async (name, email, password) => {
+    setError(null);
+    try {
+      const response = await fetch(`${API_URL}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao cadastrar');
+      }
+      
+      setUser(data.user);
+      setProgress(null);
+      localStorage.setItem('token', data.token);
+      
+      return { success: true };
+    } catch (err) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    }
+  };
+
+  const forgotPassword = async (email) => {
+    setError(null);
+    try {
+      const response = await fetch(`${API_URL}/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao processar');
+      }
+      
+      return { success: true, message: data.message, token: data.resetToken };
+    } catch (err) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    }
+  };
+
+  const resetPassword = async (token, newPassword) => {
+    setError(null);
+    try {
+      const response = await fetch(`${API_URL}/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, newPassword })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao redefinir senha');
+      }
+      
+      return { success: true };
+    } catch (err) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+    setProgress(null);
+    localStorage.removeItem('token');
   };
 
   return (
@@ -60,7 +148,12 @@ export function AuthProvider({ children }) {
       user,
       progress,
       loading,
-      updateProgress,
+      error,
+      login,
+      register,
+      forgotPassword,
+      resetPassword,
+      logout,
       isAuthenticated: !!user
     }}>
       {children}
