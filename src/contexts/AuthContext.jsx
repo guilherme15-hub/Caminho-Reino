@@ -1,8 +1,49 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
+const STORAGE_USERS = "caminho-reino-users";
+const STORAGE_CURRENT_USER = "caminho-reino-current-user";
+const STORAGE_RESET_TOKENS = "caminho-reino-reset-tokens";
 
-const API_URL = 'http://localhost:3001/api';
+const loadUsers = () => {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_USERS) || '[]');
+  } catch {
+    return [];
+  }
+};
+
+const saveUsers = (users) => {
+  localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+};
+
+const loadCurrentUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_CURRENT_USER));
+  } catch {
+    return null;
+  }
+};
+
+const saveCurrentUser = (user) => {
+  localStorage.setItem(STORAGE_CURRENT_USER, JSON.stringify(user));
+};
+
+const removeCurrentUser = () => {
+  localStorage.removeItem(STORAGE_CURRENT_USER);
+};
+
+const loadResetTokens = () => {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_RESET_TOKENS) || '{}');
+  } catch {
+    return {};
+  }
+};
+
+const saveResetTokens = (tokens) => {
+  localStorage.setItem(STORAGE_RESET_TOKENS, JSON.stringify(tokens));
+};
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -10,137 +51,123 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Verificar token ao iniciar
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetchProfile(token);
-    } else {
-      setLoading(false);
+    const storedUser = loadCurrentUser();
+    if (storedUser) {
+      setUser(storedUser);
+      setProgress(storedUser.progress || null);
     }
+    setLoading(false);
   }, []);
-
-  const fetchProfile = async (token) => {
-    try {
-      const response = await fetch(`${API_URL}/profile`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-        setProgress(data.progress);
-        localStorage.setItem('token', token);
-      } else {
-        logout();
-      }
-    } catch (err) {
-      logout();
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const login = async (email, password) => {
     setError(null);
-    try {
-      const response = await fetch(`${API_URL}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao fazer login');
-      }
-      
-      setUser(data.user);
-      setProgress(data.progress);
-      localStorage.setItem('token', data.token);
-      
-      return { success: true };
-    } catch (err) {
-      setError(err.message);
-      return { success: false, error: err.message };
+    const users = loadUsers();
+    const found = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+
+    if (!found || found.password !== password) {
+      const message = 'Email or password incorrect';
+      setError(message);
+      return { success: false, error: message };
     }
+
+    const currentUser = { ...found };
+    setUser(currentUser);
+    setProgress(currentUser.progress || null);
+    saveCurrentUser(currentUser);
+
+    return { success: true };
   };
 
   const register = async (name, email, password) => {
     setError(null);
-    try {
-      const response = await fetch(`${API_URL}/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao cadastrar');
-      }
-      
-      setUser(data.user);
-      setProgress(null);
-      localStorage.setItem('token', data.token);
-      
-      return { success: true };
-    } catch (err) {
-      setError(err.message);
-      return { success: false, error: err.message };
+    const users = loadUsers();
+    const existing = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+
+    if (existing) {
+      const message = 'Email already registered';
+      setError(message);
+      return { success: false, error: message };
     }
+
+    const newUser = {
+      id: Date.now(),
+      name,
+      email,
+      password,
+      progress: {
+        quests_completed: 0,
+        badges: 0,
+        study_time: 0,
+        points: 0
+      }
+    };
+
+    users.push(newUser);
+    saveUsers(users);
+    saveCurrentUser(newUser);
+    setUser(newUser);
+    setProgress(newUser.progress);
+
+    return { success: true };
   };
 
   const forgotPassword = async (email) => {
     setError(null);
-    try {
-      const response = await fetch(`${API_URL}/forgot-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao processar');
-      }
-      
-      return { success: true, message: data.message, token: data.resetToken };
-    } catch (err) {
-      setError(err.message);
-      return { success: false, error: err.message };
+    const users = loadUsers();
+    const found = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+
+    if (!found) {
+      const message = 'Email not found';
+      setError(message);
+      return { success: false, error: message };
     }
+
+    const token = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    const tokens = loadResetTokens();
+    tokens[token] = found.email;
+    saveResetTokens(tokens);
+
+    return {
+      success: true,
+      message: 'Password reset token generated',
+      resetToken: token
+    };
   };
 
   const resetPassword = async (token, newPassword) => {
     setError(null);
-    try {
-      const response = await fetch(`${API_URL}/reset-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, newPassword })
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao redefinir senha');
-      }
-      
-      return { success: true };
-    } catch (err) {
-      setError(err.message);
-      return { success: false, error: err.message };
+    const tokens = loadResetTokens();
+    const email = tokens[token];
+
+    if (!email) {
+      const message = 'Invalid or expired token';
+      setError(message);
+      return { success: false, error: message };
     }
+
+    const users = loadUsers();
+    const userIndex = users.findIndex((u) => u.email.toLowerCase() === email.toLowerCase());
+
+    if (userIndex === -1) {
+      const message = 'User not found';
+      setError(message);
+      return { success: false, error: message };
+    }
+
+    users[userIndex].password = newPassword;
+    saveUsers(users);
+
+    delete tokens[token];
+    saveResetTokens(tokens);
+
+    return { success: true };
   };
 
   const logout = () => {
     setUser(null);
     setProgress(null);
-    localStorage.removeItem('token');
+    removeCurrentUser();
   };
 
   return (
