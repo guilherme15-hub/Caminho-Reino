@@ -53,30 +53,30 @@ const lessonData = {
       icon: "✝️",
       questions: [
         {
-          question: "Em João 10:17-18, Jesus diz que ninguém tira Sua vida, mas Ele a entrega. O que isso revela sobre Sua morte?",
+          question: "O que Jesus quis dizer quando afirmou em João 10:17-18 que ninguém tira Sua vida voluntariamente?",
           answers: [
-            { text: "Foi um acidente", color: "red", shape: "triangle", isCorrect: false },
-            { text: "Foi uma decisão voluntária por amor", color: "blue", shape: "diamond", isCorrect: true },
-            { text: "Foi imposta pelos líderes religiosos", color: "yellow", shape: "circle", isCorrect: false },
-            { text: "Foi uma derrota para Satanás", color: "green", shape: "square", isCorrect: false }
+            { text: "Que foi um acidente", color: "red", shape: "triangle", isCorrect: false },
+            { text: "Que Ele escolheu livremente entregar Sua vida por nós", color: "blue", shape: "diamond", isCorrect: true },
+            { text: "Que foi imposta pelos líderes religiosos", color: "yellow", shape: "circle", isCorrect: false },
+            { text: "Que foi uma derrota para o reino de Deus", color: "green", shape: "square", isCorrect: false }
           ]
         },
         {
-          question: "Qual foi a razão principal pela qual Jesus veio à terra, segundo Lucas 9:56?",
+          question: "Em Mateus 16:21, Jesus prediz Sua morte e ressurreição. Por que Jesus precisava sofrer?",
           answers: [
-            { text: "Para estabelecer um reino político", color: "red", shape: "triangle", isCorrect: false },
-            { text: "Para buscar e salvar o que estava perdido", color: "blue", shape: "diamond", isCorrect: true },
-            { text: "Para realizar milagres e impressionar multidões", color: "yellow", shape: "circle", isCorrect: false },
-            { text: "Para ensinar a lei de Moisés", color: "green", shape: "square", isCorrect: false }
+            { text: "Como punição por nossos pecados e para nos redimir", color: "red", shape: "triangle", isCorrect: true },
+            { text: "Para ser igual aos profetas do Antigo Testamento", color: "blue", shape: "diamond", isCorrect: false },
+            { text: "Para demonstrar poder sobre Seus inimigos", color: "yellow", shape: "circle", isCorrect: false },
+            { text: "Para cumprir a lei de Moisés", color: "green", shape: "square", isCorrect: false }
           ]
         },
         {
-          question: "Isaías 53:5 diz que Jesus foi ferido por nossas transgressões. O que isso significa?",
+          question: "Segundo Hebreus 9:26, qual era o propósito final do sacrifício de Jesus na cruz?",
           answers: [
-            { text: "Jesus sofreu física e espiritualmente em nosso lugar", color: "red", shape: "triangle", isCorrect: true },
-            { text: "Jesus foi punido por Seus próprios pecados", color: "blue", shape: "diamond", isCorrect: false },
-            { text: "Jesus foi ferido pelos soldados romanos", color: "yellow", shape: "circle", isCorrect: false },
-            { text: "Jesus foi ferido pela multidão", color: "green", shape: "square", isCorrect: false }
+            { text: "Trazer condenação sobre o povo judeu", color: "red", shape: "triangle", isCorrect: false },
+            { text: "Eliminar o pecado do mundo de uma vez por todas", color: "blue", shape: "diamond", isCorrect: true },
+            { text: "Estabelecer um governo político", color: "yellow", shape: "circle", isCorrect: false },
+            { text: "Restaurar apenas o povo de Israel", color: "green", shape: "square", isCorrect: false }
           ]
         }
       ],
@@ -93,30 +93,30 @@ const lessonData = {
       icon: "❤️",
       questions: [
         {
-          question: "Romanos 5:8 diz que Cristo morreu por nós. O que isso demonstra sobre o amor de Deus?",
+          question: "O que Romanos 5:8 nos ensina ao dizer que Cristo morreu por nós enquanto éramos ainda pecadores?",
           answers: [
-            { text: "Deus nos ama mesmo sendo pecadores", color: "red", shape: "triangle", isCorrect: true },
-            { text: "Deus só ama pessoas boas", color: "blue", shape: "diamond", isCorrect: false },
-            { text: "Deus mudou de ideia sobre nós", color: "yellow", shape: "circle", isCorrect: false },
-            { text: "Deus precisou nos salvar por obrigação", color: "green", shape: "square", isCorrect: false }
+            { text: "Que Deus nos ama incondicionalmente, não por mérito", color: "red", shape: "triangle", isCorrect: true },
+            { text: "Que Deus só ama pessoas boas e virtuosas", color: "blue", shape: "diamond", isCorrect: false },
+            { text: "Que éramos dignos do amor de Deus", color: "yellow", shape: "circle", isCorrect: false },
+            { text: "Que o pecado nos impede de ser amados", color: "green", shape: "square", isCorrect: false }
           ]
         },
         {
-          question: "Em João 15:13, Jesus diz que não há maior amor do que este. Qual é esse amor?",
+          question: "Em 1 Tessalonicenses 5:9-10, Paulo diz que Jesus morreu para que vivamos com Ele. O que isso significa?",
           answers: [
-            { text: "Amar os amigos", color: "red", shape: "triangle", isCorrect: false },
-            { text: "Dar a vida pelos amigos", color: "blue", shape: "diamond", isCorrect: true },
-            { text: "Amar a família", color: "yellow", shape: "circle", isCorrect: false },
-            { text: "Amar a pátria", color: "green", shape: "square", isCorrect: false }
+            { text: "Que devemos viver com medo do julgamento", color: "red", shape: "triangle", isCorrect: false },
+            { text: "Que através da morte de Jesus temos comunhão eterna com Deus", color: "blue", shape: "diamond", isCorrect: true },
+            { text: "Que viveremos em abundância material", color: "yellow", shape: "circle", isCorrect: false },
+            { text: "Que devemos viver escondidos do mundo", color: "green", shape: "square", isCorrect: false }
           ]
         },
         {
-          question: "Após a crucificação, Jesus foi colocado em um túmulo novo. O que isso simboliza?",
+          question: "De acordo com Efésios 2:4-7, qual é o resultado do amor sacrificial de Deus manifestado na cruz?",
           answers: [
-            { text: "O fim da história", color: "red", shape: "triangle", isCorrect: false },
-            { text: "O sacrifício completo e a sepultura do velho homem", color: "blue", shape: "diamond", isCorrect: true },
-            { text: "Uma sepultura comum", color: "yellow", shape: "circle", isCorrect: false },
-            { text: "O esquecimento de Jesus", color: "green", shape: "square", isCorrect: false }
+            { text: "Sofrimento contínuo e sofrimento eterno", color: "red", shape: "triangle", isCorrect: false },
+            { text: "Ressurreição espiritual conosco e vida nos lugares celestiais", color: "blue", shape: "diamond", isCorrect: true },
+            { text: "Punição eterna sem redenção", color: "yellow", shape: "circle", isCorrect: false },
+            { text: "Esquecimento de nossos pecados passados", color: "green", shape: "square", isCorrect: false }
           ]
         }
       ],
@@ -139,6 +139,7 @@ export default function QuizGame({ onQuit }) {
   const [inventory, setInventory] = useState([]);
   const [chaptersCompleted, setChaptersCompleted] = useState([]);
   const [totalScore, setTotalScore] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState([]);
 
   const handleAnswer = (answerIndex) => {
     if (showResult) return;
@@ -149,6 +150,9 @@ export default function QuizGame({ onQuit }) {
     
     if (isCorrect) {
       setScore(score + 1000);
+      setCorrectAnswers(prev => [...prev, true]);
+    } else {
+      setCorrectAnswers(prev => [...prev, false]);
     }
     setShowResult(true);
 
@@ -159,11 +163,17 @@ export default function QuizGame({ onQuit }) {
       if (currentQIndex + 1 < chapter.questions.length) {
         setCurrentQIndex(currentQIndex + 1);
       } else {
-        // Capítulo completo - adicionar recompensa
-        const reward = chapter.reward;
-        setInventory(prev => [...prev, { ...reward, chapterId: chapter.id }]);
-        setChaptersCompleted(prev => [...prev, chapter.id]);
-        setTotalScore(prev => prev + score + (isCorrect ? 1000 : 0));
+        // Capítulo completo - verificar se acertou todas as perguntas
+        const allAnswers = correctAnswers.concat([isCorrect]);
+        const allCorrect = allAnswers.length === chapter.questions.length && 
+                          allAnswers.every(answer => answer === true);
+        
+        if (allCorrect) {
+          const reward = chapter.reward;
+          setInventory(prev => [...prev, { ...reward, chapterId: currentChapter }]);
+          setChaptersCompleted(prev => [...prev, currentChapter]);
+          setTotalScore(prev => prev + score + 1000);
+        }
         setGameState('result');
       }
     }, 2500);
@@ -175,6 +185,7 @@ export default function QuizGame({ onQuit }) {
     setScore(0);
     setShowResult(false);
     setSelectedAnswer(null);
+    setCorrectAnswers([]);
     setGameState('quiz');
   };
 
@@ -226,7 +237,7 @@ export default function QuizGame({ onQuit }) {
         
         <div className="chapters-list">
           {lessonData.chapters.map((chapter, index) => {
-            const isCompleted = chaptersCompleted.includes(chapter.id);
+            const isCompleted = chaptersCompleted.includes(index);
             return (
               <div key={chapter.id} className={`chapter-card ${isCompleted ? 'completed' : ''}`}>
                 <div className="chapter-icon">{chapter.icon}</div>
@@ -239,7 +250,7 @@ export default function QuizGame({ onQuit }) {
                   {isCompleted ? (
                     <span className="completed-badge">✓ Concluído</span>
                   ) : (
-                    <button className="play-btn" onClick={() => startChapter(chapter.id)}>
+                    <button className="play-btn" onClick={() => startChapter(index)}>
                       ▶ Jogar
                     </button>
                   )}
@@ -256,33 +267,56 @@ export default function QuizGame({ onQuit }) {
   if (gameState === 'result') {
     const chapter = lessonData.chapters[currentChapter];
     const reward = chapter.reward;
+    const isChapterCompleted = chaptersCompleted.includes(currentChapter);
     
     return (
       <div className="quiz-container result-bg">
         <div className="result-content">
-          <h1>🎉 Capítulo Completo!</h1>
-          <div className="chapter-title">{chapter.title}</div>
-          
-          <div className="score-section">
-            <div className="score-label">Pontuação deste capítulo</div>
-            <div className="score-value">{score}</div>
-          </div>
-          
-          <div className="reward-section">
-            <h3>Recompensa Obtida!</h3>
-            <div className="reward-card">
-              <div className="reward-icon">{reward.icon}</div>
-              <div className="reward-name">{reward.name}</div>
-              <div className="reward-desc">{reward.description}</div>
-            </div>
-          </div>
+          {isChapterCompleted ? (
+            <>
+              <h1>🎉 Capítulo Completo!</h1>
+              <div className="chapter-title">{chapter.title}</div>
+              
+              <div className="score-section">
+                <div className="score-label">Pontuação deste capítulo</div>
+                <div className="score-value">{score}</div>
+              </div>
+              
+              <div className="reward-section">
+                <h3>Recompensa Obtida!</h3>
+                <div className="reward-card">
+                  <div className="reward-icon">{reward.icon}</div>
+                  <div className="reward-name">{reward.name}</div>
+                  <div className="reward-desc">{reward.description}</div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <h1>❌ Capítulo Não Concluído</h1>
+              <div className="chapter-title">{chapter.title}</div>
+              
+              <div className="score-section">
+                <div className="score-label">Você errou uma ou mais perguntas</div>
+                <p style={{ textAlign: 'center', marginTop: '15px' }}>Acerte todas as 3 perguntas para ganhar a recompensa!</p>
+              </div>
+            </>
+          )}
           
           <div className="result-buttons">
+            {!isChapterCompleted && (
+              <button className="menu-btn primary" onClick={() => startChapter(currentChapter)}>
+                🔄 Tentar Novamente
+              </button>
+            )}
             <button className="menu-btn primary" onClick={() => setGameState('map')}>
               Ver Mapa
             </button>
             <button className="menu-btn secondary" onClick={() => setGameState('inventory')}>
               Ver Inventário
+            </button>
+            <button className="menu-btn secondary" onClick={() => { setGameState('menu'); setCurrentChapter(null); }}>
+              🏠 Menu Inicial
             </button>
           </div>
         </div>
@@ -297,6 +331,7 @@ export default function QuizGame({ onQuit }) {
         <div className="inventory-header">
           <button className="back-btn" onClick={() => setGameState('map')}>← Voltar</button>
           <h2>🎒 Meu Inventário</h2>
+          <button className="back-btn" onClick={() => { setGameState('menu'); setCurrentChapter(null); }} style={{ float: 'right' }}>🏠 Menu</button>
         </div>
         
         <div className="inventory-stats">
@@ -335,6 +370,10 @@ export default function QuizGame({ onQuit }) {
   }
 
   // Tela de Quiz (Perguntas)
+  if (currentChapter === null) {
+    return null; // Prevenir erro se currentChapter não for definido
+  }
+  
   const chapter = lessonData.chapters[currentChapter];
   const q = chapter.questions[currentQIndex];
 
