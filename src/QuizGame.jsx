@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './QuizGame.css';
+import { useGamePersistence } from './hooks/useGamePersistence';
 
 // Dados da lição: Jesus se fez carne por amor
 const lessonData = {
@@ -169,6 +170,16 @@ export default function QuizGame({ onQuit }) {
   const [capturedItem, setCapturedItem] = useState(null);
   const [capturedChapter, setCapturedChapter] = useState(null);
   const [miniObstacles, setMiniObstacles] = useState([]);
+
+  // Integrar persistência de dados com localStorage
+  useGamePersistence({
+    chaptersCompleted,
+    inventory,
+    totalScore,
+    setChaptersCompleted,
+    setInventory,
+    setTotalScore
+  });
 
   const itemSlotCount = 14;
   const allCapturedChapterItems = inventory.filter(item => typeof item.chapterId === 'number').length;
