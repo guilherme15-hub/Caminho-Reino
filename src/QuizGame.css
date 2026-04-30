@@ -170,6 +170,13 @@
   padding: 20px;
 }
 
+/* Menu Inicial - Mobile */
+@media (max-width: 768px) {
+  .menu-bg {
+    background-image: url('/caminho_reino2.png');
+  }
+}
+
 .menu-content {
   text-align: center;
   max-width: 420px;
