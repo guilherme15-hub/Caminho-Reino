@@ -15,7 +15,7 @@ const NotificationsIcon = () => (<svg viewBox="0 0 24 24" width="24" height="24"
 // Componente interno que usa useAuth
 function AppContent() {
   const { user, loading } = useAuth();
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState('play'); // Começar direto no jogo
 
   // Se carregando, mostra loading
   if (loading) {

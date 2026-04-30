@@ -3,14 +3,15 @@ import './QuizGame.css';
 
 // Dados da lição: Jesus se fez carne por amor
 const lessonData = {
-  title: "Jesus se fez carne por amor",
-  theme: "Encarnação, cruz intencional, amor sacrificial",
+  title: "Caminho do Reino",
+  theme: "Jornada espiritual através da Bíblia",
   chapters: [
     {
       id: 1,
       title: "A Encarnação",
       description: "Jesus deixa a glória celestial e se torna humano",
       icon: "👶",
+      unlocked: true,
       questions: [
         {
           question: "Segundo João 1:14, o Verbo se fez carne e habitou entre nós. O que significa 'habitou entre nós'?",
@@ -51,6 +52,7 @@ const lessonData = {
       title: "A Cruz Intencional",
       description: "Jesus escolhe ir à cruz por amor a nós",
       icon: "✝️",
+      unlocked: true,
       questions: [
         {
           question: "O que Jesus quis dizer quando afirmou em João 10:17-18 que ninguém tira Sua vida voluntariamente?",
@@ -91,6 +93,7 @@ const lessonData = {
       title: "O Amor Sacrificial",
       description: "O amor de Deus se manifesta plenamente na cruz",
       icon: "❤️",
+      unlocked: true,
       questions: [
         {
           question: "O que Romanos 5:8 nos ensina ao dizer que Cristo morreu por nós enquanto éramos ainda pecadores?",
@@ -125,8 +128,27 @@ const lessonData = {
         description: "O amor eterno de Deus por nós",
         icon: "💖"
       }
-    }
+    },
+    // Capítulos bloqueados (placeholders)
+    { id: 4, title: "Capítulo 4", description: "Em desenvolvimento", icon: "🔒", unlocked: false },
+    { id: 5, title: "Capítulo 5", description: "Em desenvolvimento", icon: "🔒", unlocked: false },
+    { id: 6, title: "Capítulo 6", description: "Em desenvolvimento", icon: "🔒", unlocked: false },
+    { id: 7, title: "Capítulo 7", description: "Em desenvolvimento", icon: "🔒", unlocked: false },
+    { id: 8, title: "Capítulo 8", description: "Em desenvolvimento", icon: "🔒", unlocked: false },
+    { id: 9, title: "Capítulo 9", description: "Em desenvolvimento", icon: "🔒", unlocked: false },
+    { id: 10, title: "Capítulo 10", description: "Em desenvolvimento", icon: "🔒", unlocked: false },
+    { id: 11, title: "Capítulo 11", description: "Em desenvolvimento", icon: "🔒", unlocked: false },
+    { id: 12, title: "Capítulo 12", description: "Em desenvolvimento", icon: "🔒", unlocked: false },
+    { id: 13, title: "Capítulo 13", description: "Em desenvolvimento", icon: "🔒", unlocked: false }
   ]
+};
+
+const bonusReward = {
+  id: 100,
+  title: "Bênção do Reino",
+  name: "Bênção do Reino",
+  description: "Recompensa extra por coletar todos os itens sagrados.",
+  icon: "✨"
 };
 
 export default function QuizGame({ onQuit }) {
@@ -140,6 +162,30 @@ export default function QuizGame({ onQuit }) {
   const [chaptersCompleted, setChaptersCompleted] = useState([]);
   const [totalScore, setTotalScore] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState([]);
+  const [miniPosition, setMiniPosition] = useState({ row: 3, col: 0 });
+  const [miniStatus, setMiniStatus] = useState('ready');
+  const [miniMessage, setMiniMessage] = useState('');
+  const [showItemMessage, setShowItemMessage] = useState(false);
+  const [capturedItem, setCapturedItem] = useState(null);
+  const [capturedChapter, setCapturedChapter] = useState(null);
+  const [miniObstacles, setMiniObstacles] = useState([]);
+
+  const itemSlotCount = 14;
+  const allCapturedChapterItems = inventory.filter(item => typeof item.chapterId === 'number').length;
+  const bonusUnlocked = allCapturedChapterItems >= lessonData.chapters.length;
+  const inventorySlots = Array.from({ length: itemSlotCount }, (_, index) => {
+    if (index < inventory.length) {
+      return inventory[index];
+    }
+
+    if (index === lessonData.chapters.length) {
+      return bonusUnlocked
+        ? { ...bonusReward, chapterId: 'bonus' }
+        : { locked: true, name: 'Item Bônus', icon: '🔒', description: 'Colete todos os itens para desbloquear' };
+    }
+
+    return { locked: true, name: `Item ${index + 1}`, icon: '🔒', description: 'Indisponível / em desenvolvimento' };
+  });
 
   const handleAnswer = (answerIndex) => {
     if (showResult) return;
@@ -169,8 +215,6 @@ export default function QuizGame({ onQuit }) {
                           allAnswers.every(answer => answer === true);
         
         if (allCorrect) {
-          const reward = chapter.reward;
-          setInventory(prev => [...prev, { ...reward, chapterId: currentChapter }]);
           setChaptersCompleted(prev => [...prev, currentChapter]);
           setTotalScore(prev => prev + score + 1000);
         }
@@ -180,6 +224,9 @@ export default function QuizGame({ onQuit }) {
   };
 
   const startChapter = (chapterId) => {
+    const chapter = lessonData.chapters[chapterId];
+    if (!chapter.unlocked) return; // Não permitir iniciar capítulos bloqueados
+    
     setCurrentChapter(chapterId);
     setCurrentQIndex(0);
     setScore(0);
@@ -187,6 +234,121 @@ export default function QuizGame({ onQuit }) {
     setSelectedAnswer(null);
     setCorrectAnswers([]);
     setGameState('quiz');
+  };
+
+  const seedRandom = (seed) => {
+    const x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+  };
+
+  const hasPath = (obstacles) => {
+    const gridRows = 4;
+    const gridCols = 6;
+    const start = { row: 3, col: 0 };
+    const goal = { row: 0, col: 5 };
+    const blocked = new Set(obstacles.map(ob => `${ob.row},${ob.col}`));
+    const queue = [start];
+    const visited = new Set([`${start.row},${start.col}`]);
+
+    while (queue.length) {
+      const { row, col } = queue.shift();
+      if (row === goal.row && col === goal.col) return true;
+      for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+        const nr = row + dr;
+        const nc = col + dc;
+        const key = `${nr},${nc}`;
+        if (nr < 0 || nr >= gridRows || nc < 0 || nc >= gridCols) continue;
+        if (blocked.has(key)) continue;
+        if (visited.has(key)) continue;
+        visited.add(key);
+        queue.push({ row: nr, col: nc });
+      }
+    }
+    return false;
+  };
+
+  const buildObstacles = () => {
+    const width = 6;
+    const height = 4;
+    const start = { row: 3, col: 0 };
+    const goal = { row: 0, col: 5 };
+    const allCells = [];
+    for (let row = 0; row < height; row += 1) {
+      for (let col = 0; col < width; col += 1) {
+        if ((row === start.row && col === start.col) || (row === goal.row && col === goal.col)) continue;
+        allCells.push({ row, col });
+      }
+    }
+
+    let attempt = 0;
+    while (attempt < 20) {
+      const seed = Math.floor(Math.random() * 1000000) + attempt;
+      const shuffled = allCells
+        .map((cell, idx) => ({ cell, score: seedRandom(seed + idx) }))
+        .sort((a, b) => a.score - b.score)
+        .map(item => item.cell);
+      const obstacleCount = 5;
+      const obstacles = shuffled.slice(0, obstacleCount);
+      if (hasPath(obstacles)) return obstacles;
+      attempt += 1;
+    }
+
+    return [
+      { row: 3, col: 2 },
+      { row: 2, col: 2 },
+      { row: 1, col: 1 },
+      { row: 1, col: 3 },
+      { row: 0, col: 3 }
+    ];
+  };
+
+  const startMiniGame = () => {
+    setMiniPosition({ row: 3, col: 0 });
+    setMiniStatus('playing');
+    setMiniMessage('Use as setas para chegar ao item sem tocar nos obstáculos.');
+    const hour = new Date().getHours();
+    setMiniObstacles(buildObstacles());
+    setGameState('mini');
+  };
+
+  const movePlayer = (direction) => {
+    if (miniStatus !== 'playing') return;
+
+    const obstacles = miniObstacles;
+    const goal = { row: 0, col: 5 };
+    let next = { ...miniPosition };
+
+    if (direction === 'up') next.row -= 1;
+    if (direction === 'down') next.row += 1;
+    if (direction === 'left') next.col -= 1;
+    if (direction === 'right') next.col += 1;
+
+    if (next.row < 0 || next.row > 3 || next.col < 0 || next.col > 5) {
+      setMiniMessage('Não é possível sair do caminho.');
+      return;
+    }
+
+    const hitObstacle = obstacles.some(ob => ob.row === next.row && ob.col === next.col);
+    if (hitObstacle) {
+      setMiniMessage('Você bateu em um obstáculo! Retornando ao início.');
+      setMiniPosition({ row: 3, col: 0 });
+      return;
+    }
+
+    setMiniPosition(next);
+
+    if (next.row === goal.row && next.col === goal.col) {
+      const chapter = lessonData.chapters[currentChapter];
+      const reward = chapter.reward;
+      const alreadyCaptured = inventory.some(item => item.chapterId === currentChapter);
+      if (!alreadyCaptured) {
+        setCapturedItem(reward);
+        setCapturedChapter(currentChapter);
+        setShowItemMessage(true);
+      }
+      setMiniStatus('captured');
+      setMiniMessage('Item capturado! Parabéns!');
+    }
   };
 
   const getShapeSvg = (shape) => {
@@ -203,57 +365,46 @@ export default function QuizGame({ onQuit }) {
   if (gameState === 'menu') {
     return (
       <div className="quiz-container menu-bg">
-        <div className="menu-content">
-          <h1 className="menu-title">👑</h1>
-          <h2 className="menu-subtitle">{lessonData.title}</h2>
-          <p className="menu-theme">{lessonData.theme}</p>
-          
+        <div className="menu-content menu-content-compact">
           <div className="menu-buttons">
             <button className="menu-btn primary" onClick={() => setGameState('map')}>
-              🎮 Iniciar Jogo
+              🎮 Iniciar
             </button>
             <button className="menu-btn secondary" onClick={() => setGameState('inventory')}>
               🎒 Inventário {inventory.length > 0 && <span className="badge">{inventory.length}</span>}
             </button>
-          </div>
-          
-          <div className="menu-info">
-            <p>Complete os 3 capítulos para coletar todas as recompensas!</p>
           </div>
         </div>
       </div>
     );
   }
 
-  // Tela do Mapa (Capítulos)
+  // Tela do Mapa (Trilha dos Capítulos)
   if (gameState === 'map') {
     return (
       <div className="quiz-container map-bg">
         <div className="map-header">
           <button className="back-btn" onClick={() => setGameState('menu')}>← Voltar</button>
-          <h2>🗺️ Mapa da Lição</h2>
+          <h2>🗺️ Trilha do Reino</h2>
           <div className="score-display">⭐ {totalScore}</div>
         </div>
         
-        <div className="chapters-list">
+        <div className="trail-container">
           {lessonData.chapters.map((chapter, index) => {
             const isCompleted = chaptersCompleted.includes(index);
+            const isUnlocked = chapter.unlocked;
             return (
-              <div key={chapter.id} className={`chapter-card ${isCompleted ? 'completed' : ''}`}>
-                <div className="chapter-icon">{chapter.icon}</div>
-                <div className="chapter-info">
-                  <h3>Capítulo {index + 1}: {chapter.title}</h3>
-                  <p>{chapter.description}</p>
-                  <span className="chapter-questions">{chapter.questions.length} perguntas</span>
+              <div key={chapter.id} className={`trail-step ${isCompleted ? 'completed' : ''} ${!isUnlocked ? 'locked' : ''}`}>
+                <div className="trail-line"></div>
+                <div className="chapter-node" onClick={isUnlocked ? () => startChapter(index) : null}>
+                  <div className="chapter-icon">{isUnlocked ? chapter.icon : '🔒'}</div>
+                  <div className="chapter-number">{index + 1}</div>
                 </div>
-                <div className="chapter-action">
-                  {isCompleted ? (
-                    <span className="completed-badge">✓ Concluído</span>
-                  ) : (
-                    <button className="play-btn" onClick={() => startChapter(index)}>
-                      ▶ Jogar
-                    </button>
-                  )}
+                <div className="chapter-info">
+                  <h3>{chapter.title}</h3>
+                  <p>{chapter.description}</p>
+                  {isCompleted && <span className="completed-badge">✓ Concluído</span>}
+                  {!isUnlocked && <span className="locked-badge">Bloqueado</span>}
                 </div>
               </div>
             );
@@ -268,6 +419,7 @@ export default function QuizGame({ onQuit }) {
     const chapter = lessonData.chapters[currentChapter];
     const reward = chapter.reward;
     const isChapterCompleted = chaptersCompleted.includes(currentChapter);
+    const hasCapturedItem = inventory.some(item => item.chapterId === currentChapter);
     
     return (
       <div className="quiz-container result-bg">
@@ -309,6 +461,11 @@ export default function QuizGame({ onQuit }) {
                 🔄 Tentar Novamente
               </button>
             )}
+            {isChapterCompleted && !hasCapturedItem && (
+              <button className="menu-btn primary" onClick={startMiniGame}>
+                🕹️ Jogar Minijogo
+              </button>
+            )}
             <button className="menu-btn primary" onClick={() => setGameState('map')}>
               Ver Mapa
             </button>
@@ -319,6 +476,87 @@ export default function QuizGame({ onQuit }) {
               🏠 Menu Inicial
             </button>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Tela do Minijogo
+  if (gameState === 'mini' && currentChapter !== null) {
+    if (showItemMessage && capturedItem) {
+      return (
+        <div className="quiz-container mini-bg">
+          <div className="item-message">
+            <h2>🎉 Parabéns! Você capturou o item!</h2>
+            <div className="item-icon">{capturedItem.icon}</div>
+            <p><strong>{capturedItem.name}</strong></p>
+            <p>{capturedItem.description}</p>
+            <button className="menu-btn primary" onClick={() => {
+              setInventory(prev => [...prev, { ...capturedItem, chapterId: capturedChapter }]);
+              setShowItemMessage(false);
+              setCapturedItem(null);
+              setCapturedChapter(null);
+              setMiniStatus('completed');
+              setGameState('map');
+            }}>Continuar</button>
+          </div>
+        </div>
+      );
+    }
+
+    const obstacles = miniObstacles.length ? miniObstacles : buildObstacles();
+    const goal = { row: 0, col: 5 };
+    const chapter = lessonData.chapters[currentChapter];
+
+    return (
+      <div className="quiz-container mini-bg">
+        <div className="map-header">
+          <button className="back-btn" onClick={() => setGameState('result')}>← Voltar</button>
+          <h2>🕹️ Minijogo do Capítulo</h2>
+          <div className="score-display">⭐ {totalScore}</div>
+        </div>
+
+        <div className="mini-content">
+          <div className="mini-instructions">
+            <p>{miniMessage || 'Ande pelo caminho até o item evitando os obstáculos.'}</p>
+            <p className="mini-hint">Começo: 🌟 / Item: 🎁 / Obstáculos: ⛰️</p>
+            <p className="mini-hint">Capítulo: {chapter.title}</p>
+          </div>
+
+          <div className="mini-grid">
+            {Array.from({ length: 4 }).map((_, row) => (
+              <div key={row} className="mini-row">
+                {Array.from({ length: 6 }).map((_, col) => {
+                  const isPlayer = miniPosition.row === row && miniPosition.col === col;
+                  const isObstacle = obstacles.some(ob => ob.row === row && ob.col === col);
+                  const isGoal = goal.row === row && goal.col === col;
+                  return (
+                    <div
+                      key={`${row}-${col}`}
+                      className={`mini-cell ${isPlayer ? 'player' : ''} ${isObstacle ? 'obstacle' : ''} ${isGoal ? 'goal' : ''}`}
+                    >
+                      {isPlayer ? '🌟' : isGoal ? '🎁' : isObstacle ? '⛰️' : ''}
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+
+          <div className="mini-controls">
+            <button className="mini-btn" onClick={() => movePlayer('up')}>↑</button>
+            <div className="mini-horizontal-controls">
+              <button className="mini-btn" onClick={() => movePlayer('left')}>←</button>
+              <button className="mini-btn" onClick={() => movePlayer('down')}>↓</button>
+              <button className="mini-btn" onClick={() => movePlayer('right')}>→</button>
+            </div>
+          </div>
+
+          {miniStatus === 'won' && (
+            <div className="mini-win">
+              <p>🎉 Parabéns! O item foi capturado e agora está no inventário.</p>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -349,22 +587,15 @@ export default function QuizGame({ onQuit }) {
           </div>
         </div>
         
-        {inventory.length === 0 ? (
-          <div className="empty-inventory">
-            <p>Seu inventário está vazio.</p>
-            <p>Complete capítulos para ganhar recompensas!</p>
-          </div>
-        ) : (
-          <div className="inventory-grid">
-            {inventory.map((item, index) => (
-              <div key={index} className="inventory-item">
-                <div className="item-icon">{item.icon}</div>
-                <div className="item-name">{item.name}</div>
-                <div className="item-desc">{item.description}</div>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="inventory-grid">
+          {inventorySlots.map((item, index) => (
+            <div key={index} className={`inventory-item ${item.locked ? 'locked-item' : ''}`}>
+              <div className="item-icon">{item.icon}</div>
+              <div className="item-name">{item.locked ? 'Bloqueado' : item.name}</div>
+              <div className="item-desc">{item.description}</div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
